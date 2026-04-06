@@ -34,7 +34,7 @@ def get_db_connection():
         host="localhost",
         database="attendance_db",
         user="postgres",
-        password="saniya123"
+        password="your_db_password"
     )
 
 # ------------------------
@@ -412,8 +412,8 @@ def delete_student(roll):
 
 
 def send_mail(to_email, student_name, subject):
-    sender_email = "hunextra2@gmail.com"
-    app_password = "nvihvwmtstrvlcwz"
+    sender_email = "mail_id@gmail.com"
+    app_password = "16_digit_code"
 
     try:
         msg = MIMEText(f"""
