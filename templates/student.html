@@ -1,0 +1,51 @@
+<h2>Mark Attendance</h2>
+
+<input type="text" id="student_id" placeholder="Enter Roll Number">
+<button onclick="markAttendance()">Mark Attendance</button>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script>
+    function markAttendance() {
+        const studentId = document.getElementById("student_id").value;
+
+        // ❌ empty check
+        if (!studentId) {
+            alert("Enter Roll Number first ❗");
+            return;
+        }
+
+        // GET TOKEN + TIME FROM QR URL
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        const time = params.get("t");
+
+        // ❌ safety check
+        if (!token || !time) {
+            alert("Invalid QR ❌");
+            return;
+        }
+
+        console.log("Sending:", token, studentId, time); // debug
+
+        fetch("/mark_attendance", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                token: token,
+                student_id: studentId,
+                time: time
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.status);
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Server error ❌");
+            });
+    }
+</script>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+        <input type="text" id="search" placeholder="Search Roll..." onkeyup="searchStudent()">
+    <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+
+    <!-- ADD STUDENT -->
+    <div class="bg-white p-4 rounded-xl shadow mb-6">
+
+        <h3 class="font-semibold mb-3">Add Student</h3>
+
+        <form method="POST" action="/admin/add_student" class="flex gap-3">
+
+            <input name="roll" placeholder="Roll"
+                class="border p-2 rounded">
+
+            <input name="name" placeholder="Name"
+                class="border p-2 rounded">
+
+            <input name="email" placeholder="Email"
+                class="border p-2 rounded">
+
+            <input name="branch" placeholder="Branch (CSE)"
+                class="border p-2 rounded">
+            
+            <select name="year">
+                <option value="2021">1st (2021)</option>
+                <option value="2022">2nd (2022)</option>
+                <option value="2023">3rd (2023)</option>
+                <option value="2024">4th (2024)</option>
+            </select>
+
+            <button class="bg-green-500 text-white px-4 rounded">
+                Add
+            </button>
+
+        </form>
+    </div>
+
+    <!-- STUDENT TABLE -->
+    <div class="bg-white p-4 rounded-xl shadow">
+
+        <h3 class="font-semibold mb-3">Students</h3>
+
+        <table class="w-full border">
+
+            <tr class="bg-gray-200">
+                <th class="p-2">Roll</th>
+                <th class="p-2">Name</th>
+                <th class="p-2">Email</th>
+                <th class="p-2">Action</th>
+            </tr>
+
+            {% for s in students %}
+            <tr class="text-center border-t">
+                <td class="p-2">{{ s[0] }}</td>
+                <td class="p-2">{{ s[1] }}</td>
+                <td class="p-2">{{ s[2] }}</td>
+                <td>
+                    <a href="/admin/delete/{{ s[0] }}"
+                       class="text-red-500">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</body>
+</html>
+
+<script>
+function searchStudent() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.querySelectorAll("table tr");
+
+    rows.forEach((row, index) => {
+        if (index === 0) return; // skip header
+        let roll = row.children[0].innerText.toLowerCase();
+
+        if (roll.includes(input)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+</script>

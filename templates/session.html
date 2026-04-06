@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-6">
+
+        <div>
+            <h2 class="text-lg font-semibold">
+                👨‍🏫 {{ teacher }}
+            </h2>
+            <p id="clock" class="text-sm text-gray-500"></p>
+            <p class="text-sm text-gray-500">Live Attendance Session</p>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="/download_excel">
+                <button class="bg-green-500 text-white px-4 py-2 rounded-lg">
+                    Download Excel
+                </button>
+            </a>
+
+            <button onclick="endSession()" class="bg-red-500 text-white px-4 py-2 rounded-lg">
+                End Session
+            </button>
+        </div>
+
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="grid grid-cols-2 gap-6">
+
+        <!-- QR BOX -->
+        <div class="bg-white p-6 rounded-2xl shadow text-center">
+
+            <img id="qr" class="mx-auto rounded-lg w-64">
+
+            <p class="text-sm text-gray-500 mt-3">
+                Rotates every 5 seconds
+            </p>
+
+            <p id="count" class="mt-2 font-semibold text-lg">
+                0 Present
+            </p>
+        </div>
+
+        <!-- LIVE ATTENDANCE -->
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h3 class="font-semibold mb-4">Live Attendance</h3>
+
+            <div id="list" class="text-gray-700 space-y-2">
+                No students yet...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TIMER -->
+    <div id="timer" class="fixed bottom-5 right-5 bg-black text-white px-4 py-2 rounded-lg">
+        10:00
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function loadQR() {
+            fetch("/get_qr")
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.expired) {
+                        alert("Session expired ❌");
+                        window.location.href = "/dashboard";
+                        return;
+                    }
+
+                    document.getElementById("qr").src =
+                        "data:image/png;base64," + data.qr;
+
+                    document.getElementById("count").innerText =
+                        data.count + " Present";
+
+                    // ⏱ TIMER UPDATE
+                    let sec = data.time_left;
+                    let min = Math.floor(sec / 60);
+                    let rem = sec % 60;
+
+                    document.getElementById("timer").innerText =
+                        min + ":" + (rem < 10 ? "0" + rem : rem);
+                });
+        }
+
+       function endSession() {
+        window.location.href = "/download_excel";
+
+        setTimeout(() => {
+        window.location.href = "/end_session";
+        }, 2000);
+}
+
+        // ⏱ CLOCK
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText =
+                now.toLocaleTimeString();
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        setInterval(loadQR, 5000);
+        loadQR();
+
+        function loadAttendance() {
+            fetch("/get_attendance")
+                .then(res => res.json())
+                .then(data => {
+
+                    let html = "";
+
+                    if (data.students.length === 0) {
+                        html = "No students yet...";
+                    } else {
+                        data.students.forEach(s => {
+                            html += `
+                        <div class="bg-gray-100 p-2 rounded">
+                            <b>${s.name}</b> (${s.roll})<br>
+                            <span class="text-sm text-gray-500">${s.time}</span>
+                        </div>
+                    `;
+                        });
+                    }
+
+                    document.getElementById("list").innerHTML = html;
+                });
+        }
+        setInterval(loadAttendance, 2000);
+        loadAttendance();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Attendance</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+
+<div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+
+    <!-- Title -->
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Smart Attendance</h1>
+        <p class="text-sm text-gray-500">QR-based attendance system</p>
+    </div>
+
+    <!-- Badge -->
+    <div class="bg-indigo-50 text-indigo-600 text-sm px-4 py-2 rounded-lg mb-6 text-center">
+        🔒 Secure Teacher Portal
+    </div>
+
+    <!-- FORM -->
+    <form method="POST" class="space-y-4">
+
+        <div>
+            <label class="text-sm text-gray-600">Teacher ID</label>
+            <input name="teacher_id" required
+                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                placeholder="Enter your teacher ID">
+        </div>
+
+        <div>
+            <label class="text-sm text-gray-600">Password</label>
+            <input type="password" name="password" required
+                class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                placeholder="Enter your password">
+        </div>
+
+        <button type="submit"
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+            Sign In
+        </button>
+
+    </form>
+
+    <p class="text-center text-sm text-gray-500 mt-6">
+        I'm a student → <a href="/student" class="text-indigo-600">Mark Attendance</a>
+    </p>
+
+</div>
+
+</body>
+</html>
