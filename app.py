@@ -118,7 +118,7 @@ def get_qr():
             return jsonify({"qr": "", "count": 0})
 
         timestamp = int(time.time())
-        url = f"http://192.168.29.52:5000/student?token={token}&t={timestamp}"
+        url = f"url = f"/student?token={token}&t={timestamp}""
 
         qr = qrcode.make(url)
         buffer = io.BytesIO()
