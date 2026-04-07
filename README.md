@@ -80,7 +80,7 @@ QR-Attendance-System/
 
 1️⃣ Clone the repository
 
-git clone https://github.com/yourusername/qr-attendance-system.git
+git clone https://github.com/saniyasahoo/qr-attendance-system.git
 cd qr-attendance-system
 
 ---
