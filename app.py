@@ -46,7 +46,7 @@ def get_db_connection():
 def home():
     return render_template("index.html")
 
-
+# here teacher's login credentials are present 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -198,11 +198,11 @@ def mark_attendance():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # 🔍 get branch + year
+    #  get branch + year
     cur.execute("SELECT branch, year FROM students WHERE roll = %s", (student_id,))
     info = cur.fetchone()
 
-    # ❌ student not found
+    #  student not found
     if not info:
         conn.close()
         return jsonify({"status": "Invalid student ❌"})
@@ -210,7 +210,7 @@ def mark_attendance():
     student_branch = info[0]
     student_year = info[1]
 
-    # ❌ mismatch block
+    #  mismatch block
 
     if str(student_branch).lower() != str(session_data.get("branch")).lower() \
     or str(student_year) != str(session_data.get("year")):
@@ -229,7 +229,7 @@ def mark_attendance():
     student_name = row[0]
     student_email = row[1]
 
-    # 🔍 get saved device
+    #  get saved device
     cur.execute("SELECT device FROM students WHERE roll = %s", (student_id,))
     row_device = cur.fetchone()
 
@@ -250,7 +250,7 @@ def mark_attendance():
 
     conn.close()
 
-    # ✅ SAVE ATTENDANCE
+    #  SAVE ATTENDANCE
     attendance_data.append({
         "serial": serial_no,
         "roll": student_id,
@@ -273,7 +273,7 @@ def mark_attendance():
 
     serial_no += 1
 
-    # 📧 send mail
+    #  send mail
     send_mail(student_email, student_name, session_data["subject"])
 
     return jsonify({"status": "marked"})
@@ -285,7 +285,7 @@ def download_excel():
     ws = wb.active
     ws.title = "Attendance"
 
-    # 🔥 TOP HEADING BLOCK
+    #  TOP HEADING BLOCK
     ws.append(["ATTENDANCE REPORT"])
     ws.append([])
 
@@ -322,7 +322,7 @@ def download_excel():
 
 @app.route("/end_session")
 def end_session():
-    session.clear()   # 🔥 logout
+    session.clear()   #  logout
     session_data["session_token"] = None
     return redirect("/login")
 
